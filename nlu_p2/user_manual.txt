@@ -1,0 +1,39 @@
+The current Jupyter notebook supposes that the auxiliary .py files (oracle.py, prediction.py, preprocess.py) will be placed in the 
+same directory as the notebook itself. If this is not true, imports from those files should be adjusted accordingly.
+
+The notebook and files make usage of the following libraries, and thus those libraries should be installed on the execution environment:
+    -tensorflow (version 2.13.0)
+    -keras (version 2.13.1)
+    -requests
+    -os
+    -copy
+    -re
+    -pandas
+    -numpy
+
+The notebook, as provided, works entirely within the directory where it is placed. That is meant to simplify the definition of the
+function arguments that call for a file name, or path: if placing them on the current directory is acceptable, it suffices to write
+the name of the file/folder itself.
+
+The usage of the notebook is very simple, as it's been constructed in a basically linear manner. Executing every cell sequentially
+is enough to perform all the required tasks of the practical. There is very little to tweak in the notebook:
+    -On the last cell of the section about applying the oracle to generate training samples, it's possible to modify the third
+    parameter of the process_traces calls in order to take less/more features from stack and buffer. However, if this is done,
+    it should be done for all three calls (as the model will be tuned to expect a certain number of inputs, and thus all sets
+    should be equal in that matter). Also, in the next section, on the second cell, the variable num_features should be set to
+    whatever number of features was selected for the process_traces calls, so our training samples and the inputs of our model
+    match in dimensionality.
+    -While it's technically possible to modify the model built, doing so would require a bit of effort: if the inputs of the model
+    are changed, then the preparation of our input data, both for the "Create, train and test the models" section and the vertical
+    prediction on the next section, must be changed to match the new input structure.
+    -The last two cells might be tweaked on their filename to store results for different models. However, there is little reason
+    to execute the last cell more than once, as the clean test CONLLU file does not change between executions.
+
+The current package for the practical already includes, on the datasets/generated folder, several CONLLU files generated with the
+notebook:
+    -Files named *_predictions_cN were generated following the model structure represented in the final notebook. The number N
+    notes the number of features from stack and buffer extracted and fed to the model.
+    -Files name *_predictions_sN were generated using a simplified model structure, the one given on the practical description,
+    using a singular input and embedding instead of several. Again, N notes the number of features used.
+The CONLLU evaluation script is included in that same directory for ease of use, so that files can be tested directly after
+generation. The gold standard information is on the en_test_clean.conllu file.
