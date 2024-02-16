@@ -1,0 +1,54 @@
+The current Jupyter notebook supposes that the auxiliary .py files (preprocess.py and tagger.py) will be placed in the same directory as
+the notebook itself. If this is not true, imports from those files should be adjusted accordingly.
+
+The notebook and files make usage of the following libraries, and thus those libraries should be installed on the execution environment:
+    -tensorflow (version 2.13.0)
+    -keras (version 2.13.1)
+    -requests
+    -os
+    -re
+    -pandas
+    -numpy
+
+The notebook, as provided, works entirely within the directory where it is placed. That is meant to simplify the definition of the
+function arguments that call for a file name, or path: if placing them on the current directory is acceptable, it suffices to write
+the name of the file/folder itself.
+
+The usage of the notebook is very simple, as the notebook itself is very straightforward and streamlined. The POS_Tagger class, defined
+on the tagger.py file, has been designed so that it can be used very easily, to the point where it's enough to create the tagger object,
+and call build(), train(), test(), without any arguments, provided that the necessary datasets were added to the tagger during creation.
+In case that further knowledge over how the functions work internally is needed, both .py files feature extensive commentary over
+all their functions.
+
+The notebook is divided into several parts:
+    - Imports: there is no need to do anything there unless that, as mentioned, the import path for the auxiliary files
+    has to be changed
+
+    - Datasets and preprocessing: as will be seen throughout the whole notebook, we have performed the whole cycle with
+    three treebanks: english, french, and italian. As such, there is a lot of duplicated code that can be commented out
+    if there is no interest in training several, different-language taggers. In this section, there is already-prepared
+    code to download the treebanks, preprocess them, and generate the samples needed for the taggers. There is no need
+    to modify this code in any way, unless, as said, you don't want to train the french/italian taggers. Just execute
+    until the datasets are constructed.
+
+    - Building and training the models: this section is similarly simple. The code can be directly executed with no
+    changes. However, you may modify the datasets provided to the POS_Tagger constructor, removing the validation and/or
+    test datasets (not the training one, though). This is not recommended, as having those datasets stored on the tagger
+    object simplifies future tasks. The calls to build() and train() can be left as they are, in which case they'll use
+    their default parameters, or they can be customized:
+        - build can take embedding_dim, LSTM_dim and nlabels as parameters. They should all be integers, and they'll
+        affect the architecture of the model. Their default values are 30, 128, and 18.
+        - train can take num_epochs as a parameter. It should be an integer, and it'll define for how many epochs the
+        training continues. The default value is 10, which takes a little while, but not too much (on our experience).
+
+    - Evaluating the models and making predictions: once again, this section may be executed with no changes. The call
+    to test needs no parameters as long as a test dataset was provided during the construction of the POS_Tagger; if
+    it wasn't then you should provide a tensorflow Dataset whose format fits the planned architecture: the input should
+    be made of strings where each word is separated by a space (even punctuation signs!), no longer than 128 elements; and
+    the target should be made of integer arrays where each integer represents the UPOS tag label of the corresponding word in the
+    string (with the labels selected according to our codec, defined in preprocess.py), padded with zeros to 128 elements.
+    Finally, the calls to predict_sentence can be executed as they are, but it's probably more interesting to edit the
+    string that is passed as a parameter to check how the tagging works for different sentences.
+
+    - Appendix 1: there is no real need to execute anything here, as it's just meant to showcase the possibility of saving
+    and loading models. Of course, the folder names supplied on the calls may be edited as you wish.
